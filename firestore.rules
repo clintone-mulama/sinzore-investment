@@ -1,0 +1,87 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global Helpers
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Fetches user profile from Firestore to inspect their assigned role
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+        getUserData().role == 'Admin';
+    }
+
+    function isTreasurer() {
+      return isAuthenticated() && 
+        exists(/databases/$(database)/documents/users/$(request.auth.uid)) && 
+        getUserData().role == 'Treasurer';
+    }
+
+    function isStaff() {
+      return isAdmin() || isTreasurer();
+    }
+
+    // --- USERS COLLECTION ---
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- LOANS COLLECTION ---
+    match /loans/{loanId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- CONTRIBUTIONS COLLECTION ---
+    match /contributions/{contributionId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- PAYMENTS COLLECTION ---
+    match /payments/{paymentId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- GLOBAL CONFIG COLLECTION ---
+    match /config/{docId} {
+      allow read: if true;
+      allow write: if isAuthenticated();
+    }
+
+    // --- MANUAL RECORDS LOGS ---
+    match /manual_records/{logId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- IMMUTABLE LEDGER COLLECTION ---
+    match /ledger/{ledgerId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- ACTIVITIES COLLECTION ---
+    match /activities/{activityId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- NOTIFICATIONS COLLECTION ---
+    match /notifications/{notificationId} {
+      allow read, write: if isAuthenticated();
+    }
+
+    // --- MPESA TRANSACTIONS COLLECTION ---
+    match /mpesa_transactions/{transactionId} {
+      allow read, write: if isAuthenticated();
+    }
+  }
+}

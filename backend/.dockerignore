@@ -1,0 +1,15 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+.git
+.gitignore
+.idea
+.vscode
+Dockerfile
+.dockerignore
+.gcloudignore
+cloudbuild.yaml
+DEPLOYMENT.md
+test_*
+coverage

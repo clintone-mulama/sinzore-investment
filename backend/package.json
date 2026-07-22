@@ -1,0 +1,30 @@
+{
+  "name": "sinzore-investment-backend",
+  "version": "1.0.0",
+  "description": "Production-grade backend service for Sinzore Investment App",
+  "main": "src/server.js",
+  "type": "commonjs",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js"
+  },
+  "dependencies": {
+    "axios": "^1.7.9",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.0.1",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0"
+  },
+  "keywords": [
+    "sinzore",
+    "investment",
+    "express",
+    "firebase",
+    "mpesa",
+    "daraja"
+  ],
+  "author": "Sinzore Investment Platform",
+  "license": "ISC"
+}

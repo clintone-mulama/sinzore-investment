@@ -1,0 +1,37 @@
+*.iml
+.gradle
+.kotlin
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+/build
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+.env
+debug.keystore
+# Node backend
+node_modules/
+backend/node_modules/
+
+# Logs
+*.log
+
+# Firebase secrets
+serviceAccountKey.json
+firebase-adminsdk*.json
+
+# Environment files
+backend/.env
+
+# Build outputs
+backend/dist/
+backend/build/
+# Firebase Android config
+google-services.json

@@ -1,0 +1,66 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+
+    // Global Helpers
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    // Fetches user profile from Firestore to inspect their assigned role
+    function getUserData() {
+      return firestore.get(/databases/(default)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) && 
+        getUserData().role == 'Admin';
+    }
+
+    function isTreasurer() {
+      return isAuthenticated() && 
+        firestore.exists(/databases/(default)/documents/users/$(request.auth.uid)) && 
+        getUserData().role == 'Treasurer';
+    }
+
+    function isStaff() {
+      return isAdmin() || isTreasurer();
+    }
+
+    // --- USERS FILES (avatars, profile pics) ---
+    match /users/{userId}/{allPaths=**} {
+      allow read: if isOwner(userId) || isStaff();
+      // Allow uploading images of standard sizes (< 5MB) and type image/*
+      allow write: if isOwner(userId) && 
+                   request.resource.size < 5 * 1024 * 1024 &&
+                   request.resource.contentType.matches('image/.*');
+      allow delete: if isOwner(userId) || isAdmin();
+    }
+
+    // --- LOAN DOCUMENTS (contract copies, identity copy) ---
+    match /loans/{memberId}/{loanId}/{allPaths=**} {
+      allow read: if isOwner(memberId) || isStaff();
+      // Allow uploading files (< 10MB) of type pdf or image
+      allow write: if isOwner(memberId) && 
+                   request.resource.size < 10 * 1024 * 1024 &&
+                   (request.resource.contentType.matches('application/pdf') || 
+                    request.resource.contentType.matches('image/.*'));
+      allow delete: if isOwner(memberId) || isStaff();
+    }
+
+    // --- PAYMENT RECEIPTS (screenshots of transaction messages) ---
+    match /payments/{memberId}/{paymentId}/{allPaths=**} {
+      allow read: if isOwner(memberId) || isStaff();
+      // Allow uploading files (< 5MB) of type image
+      allow write: if isOwner(memberId) && 
+                   request.resource.size < 5 * 1024 * 1024 &&
+                   request.resource.contentType.matches('image/.*');
+      allow delete: if isOwner(memberId) || isStaff();
+    }
+  }
+}

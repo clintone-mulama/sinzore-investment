@@ -1,0 +1,6 @@
+{
+  "name": "Sinzore Investment",
+  "description": "Foundational architecture for Sinzore's Sons and Daughters Investment app, featuring robust MVVM, Clean Architecture, and modular packaging.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
