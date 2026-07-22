@@ -54,8 +54,8 @@ if (require.main === module) {
     logger.info(`Sinzore Investment Backend Server Started Successfully`);
     logger.info(`Port: ${PORT}`);
     logger.info(`Environment: ${env.nodeEnv}`);
-    logger.info(`API Base URL: http://localhost:${PORT}/api`);
-    logger.info(`Health Endpoint: http://localhost:${PORT}/api/health`);
+    logger.info(`API Base URL: ${env.apiBaseUrl}/api`);
+logger.info(`Health Endpoint: ${env.apiBaseUrl}/api/health`);
     logger.info(`=======================================================`);
 
     // Start background job scheduler
