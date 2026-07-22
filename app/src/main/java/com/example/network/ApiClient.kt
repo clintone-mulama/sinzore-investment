@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 object ApiClient {
 
-    private const val DEFAULT_BASE_URL = "http://10.0.2.2:5000/api/"
+    private const val DEFAULT_BASE_URL = "https://sinzore-backend.onrender.com/api/"
 
     @Volatile
     private var currentBaseUrl: String = DEFAULT_BASE_URL
